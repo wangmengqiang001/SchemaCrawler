@@ -30,6 +30,7 @@
         <module name="schemacrawler-maven-plugin" />
         <module name="schemacrawler-maven-plugin-test" />
         <module name="schemacrawler-mysql" />
+        <module name="schemacrawler-neo4j" />
         <module name="schemacrawler-offline" />
         <module name="schemacrawler-oracle" />
         <module name="schemacrawler-postgresql" />
@@ -63,6 +64,7 @@
       <module name="schemacrawler-lint" options="-profile compact2 -Werror" />
       <module name="schemacrawler-maven-plugin" options="-profile compact2 -Werror" />
       <module name="schemacrawler-mysql" options="-profile compact2 -Werror" />
+      <module name="schemacrawler-neo4j" options="-profile compact2 -Werror" />
       <module name="schemacrawler-offline" options="-profile compact2 -Werror" />
       <module name="schemacrawler-oracle" options="-profile compact2 -Werror" />
       <module name="schemacrawler-postgresql" options="-profile compact2 -Werror" />

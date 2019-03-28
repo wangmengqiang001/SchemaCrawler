@@ -67,7 +67,7 @@
 
         <module>../schemacrawler-commandline</module>
 
-				<module>../schemacrawler-scripting</module>
+        <module>../schemacrawler-scripting</module>
         <module>../schemacrawler-lint</module>
 
         <module>../schemacrawler-db2</module>
@@ -78,6 +78,7 @@
         <module>../schemacrawler-sqlite</module>
         <module>../schemacrawler-sqlserver</module>
         <module>../schemacrawler-offline</module>
+        <module>../schemacrawler-neo4j</module>
 
         <module>../schemacrawler-examplecode</module>
 

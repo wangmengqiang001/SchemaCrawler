@@ -39,3 +39,5 @@ buildNumber.properties
 **/derby.log
 /schemacrawler-examplecode/src/main/java/Issue166.java
 /schemacrawler-examplecode/src/main/java/Issue167.java
+/schemacrawler-neo4j/store_lock
+/schemacrawler-neo4j/logs

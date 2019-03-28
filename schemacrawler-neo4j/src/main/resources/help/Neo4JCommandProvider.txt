@@ -1,0 +1,13 @@
+--- Command ---
+
+-command=neo4j
+  Runs the neo4j command
+
+--- Output Options ---
+
+-outputformat=<outputformat>
+  Where <outputformat> is the output format
+
+-outputfile=<outputfile>
+  Optional
+  <outputfile> is the path to the output file
