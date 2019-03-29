@@ -30,13 +30,8 @@ package schemacrawler.tools.integrations.neo4j;
 
 import static java.util.Objects.requireNonNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
-import apoc.ApocConfiguration;
-import apoc.export.cypher.ExportCypher;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
@@ -55,7 +50,6 @@ public class SchemaNeo4JHandler
   public SchemaNeo4JHandler(final Path outputDirectory)
   {
     requireNonNull(outputDirectory, "No output directory provided");
-    System.out.println(outputDirectory.toAbsolutePath());
 
     final GraphDatabaseFactory dbFactory = new GraphDatabaseFactory();
     dbService = dbFactory.newEmbeddedDatabase(outputDirectory.toFile());
@@ -271,22 +265,6 @@ public class SchemaNeo4JHandler
   public void end()
     throws SchemaCrawlerException
   {
-    try (final Transaction tx = dbService.beginTx())
-    {
-      final Map<String, Object> config = new HashMap<>();
-      config.put("export.file.enabled", "true");
-      ApocConfiguration.addToConfig(config);
-
-      final ExportCypher exportCypher = new ExportCypher(dbService);
-      exportCypher.all("./sc.cypher", config);
-
-      tx.success();
-    }
-    catch (final IOException e)
-    {
-      throw new SchemaCrawlerException("Could not export Cypher file", e);
-    }
-
     if (dbService != null)
     {
       dbService.shutdown();

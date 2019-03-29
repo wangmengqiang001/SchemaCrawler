@@ -27,37 +27,25 @@ http://www.gnu.org/licenses/
 */
 
 
-import static schemacrawler.test.utility.ExecutableTestUtility.executableExecution;
-import static schemacrawler.test.utility.TestUtility.clean;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static schemacrawler.test.utility.FileHasContent.*;
 
 import java.nio.file.Path;
 import java.sql.Connection;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import schemacrawler.schemacrawler.IncludeAll;
-import schemacrawler.schemacrawler.RegularExpressionExclusionRule;
 import schemacrawler.schemacrawler.SchemaCrawlerOptions;
-import schemacrawler.schemacrawler.SchemaCrawlerOptionsBuilder;
 import schemacrawler.test.utility.*;
 import schemacrawler.tools.executable.SchemaCrawlerExecutable;
-import schemacrawler.tools.options.TextOutputFormat;
+import schemacrawler.tools.options.OutputOptionsBuilder;
+import sf.util.IOUtility;
 
 @ExtendWith(TestLoggingExtension.class)
 @ExtendWith(TestDatabaseConnectionParameterResolver.class)
 @ExtendWith(TestContextParameterResolver.class)
 public class Neo4jRendererOptionsTest
 {
-
-  private static final String NEO4J_OUTPUT = "neo4j_output/";
-
-  @BeforeAll
-  public static void removeOutputDir()
-    throws Exception
-  {
-    clean(NEO4J_OUTPUT);
-  }
 
   @Test
   public void executableForNeo4j_00(final TestContext testContext,
@@ -72,25 +60,23 @@ public class Neo4jRendererOptionsTest
   }
 
   private void executableNeo4j(final Connection connection,
-                               final SchemaCrawlerOptions options,
+                               final SchemaCrawlerOptions schemaCrawlerOptions,
                                final String testMethodName)
     throws Exception
   {
-    SchemaCrawlerOptions schemaCrawlerOptions = options;
-    if (options.getSchemaInclusionRule().equals(new IncludeAll()))
-    {
-      schemaCrawlerOptions = SchemaCrawlerOptionsBuilder.builder()
-        .fromOptions(options).includeSchemas(new RegularExpressionExclusionRule(
-          ".*\\.SYSTEM_LOBS|.*\\.FOR_LINT")).toOptions();
-    }
+    final Path tempFile = IOUtility.createTempFilePath("test", "cypher");
+    final OutputOptionsBuilder outputOptionsBuilder = OutputOptionsBuilder
+      .builder().withOutputFile(tempFile);
 
     final SchemaCrawlerExecutable executable = new SchemaCrawlerExecutable(
       "neo4j");
     executable.setSchemaCrawlerOptions(schemaCrawlerOptions);
+    executable.setOutputOptions(outputOptionsBuilder.toOptions());
+    executable.setConnection(connection);
+    executable.execute();
 
-    final Path testDiagramFile = executableExecution(connection,
-                                                     executable,
-                                                     TextOutputFormat.text);
+    assertThat(outputOf(tempFile),
+               hasSameContentAs(classpathResource(testMethodName + ".cypher")));
   }
 
 }

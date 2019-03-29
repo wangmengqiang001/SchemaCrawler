@@ -28,8 +28,10 @@ http://www.gnu.org/licenses/
 package schemacrawler.tools.integrations.neo4j;
 
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import schemacrawler.tools.executable.BaseSchemaCrawlerCommand;
@@ -57,7 +59,8 @@ public class Neo4JRenderer
     // TODO: Possibly process command-line options, which are available
     // in additionalConfiguration
 
-    final Path outputDirectory = Paths.get("./scneo4j");
+    final Path outputDirectory = Files.createTempDirectory("sc-neo4j")
+      .toAbsolutePath();
 
     final SchemaTraversalHandler formatter = new SchemaNeo4JHandler(
       outputDirectory);
@@ -67,6 +70,17 @@ public class Neo4JRenderer
     traverser.setHandler(formatter);
 
     traverser.traverse();
+
+    // Export to Cypher file
+    final Path outputFile = outputOptions.getOutputFile().orElseGet(() -> Paths
+      .get(".",
+           String.format("schemacrawler-%s.%s",
+                         UUID.randomUUID(),
+                         outputOptions.getOutputFormatValue()))).normalize()
+      .toAbsolutePath();
+    final Neo4jExporter neo4jExporter = new Neo4jExporter(outputDirectory);
+    neo4jExporter.export(outputFile);
+    neo4jExporter.close();
 
   }
 
