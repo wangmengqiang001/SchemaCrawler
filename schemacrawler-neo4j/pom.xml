@@ -59,6 +59,11 @@
       <artifactId>neo4j</artifactId>
       <version>3.5.3</version>
     </dependency>
+    <dependency>
+      <groupId>org.neo4j.procedure</groupId>
+      <artifactId>apoc</artifactId>
+      <version>3.5.0.2</version>
+    </dependency>
 
   </dependencies>
   <build>

@@ -41,6 +41,7 @@ public class Neo4JRenderer
 {
 
   static final String COMMAND = "neo4j";
+
   private static final Logger LOGGER = Logger
     .getLogger(Neo4JRenderer.class.getName());
 
