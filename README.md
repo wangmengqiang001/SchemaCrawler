@@ -10,7 +10,7 @@
 
 # SchemaCrawler
 
-> **Please see the [SchemaCrawler website](http://www.schemacrawler.com/) for more details.**
+> **Please see the [SchemaCrawler website](https://www.schemacrawler.com/) for more details.**
 
 ## About
 
